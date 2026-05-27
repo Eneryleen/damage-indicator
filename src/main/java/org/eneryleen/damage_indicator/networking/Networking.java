@@ -18,6 +18,15 @@ public class Networking {
     }
 
     private static void handleSpawnIndicator(SpawnIndicatorPayload payload, IPayloadContext context) {
-        DamageIndicatorManager.addIndicator(payload.x(), payload.y(), payload.z(), payload.damage(), payload.isCritical());
+        // Защита от враждебного/багованного сервера: NaN/Infinity в координатах
+        // ломает матрицы рендера, а отрицательный/нечисловой damage не имеет смысла.
+        if (!Double.isFinite(payload.x()) || !Double.isFinite(payload.y()) || !Double.isFinite(payload.z())
+                || !Float.isFinite(payload.damage()) || payload.damage() <= 0) {
+            return;
+        }
+        // Сетевой пакет приходит в network-треде; работа с состоянием рендера
+        // (DamageIndicatorManager / Minecraft instance) обязана идти в main-треде.
+        context.enqueueWork(() -> DamageIndicatorManager.addIndicator(
+                payload.x(), payload.y(), payload.z(), payload.damage(), payload.isCritical()));
     }
 }
