@@ -15,7 +15,9 @@ public class DamageEventHandler {
     @SubscribeEvent
     public static void onLivingDamagePost(LivingDamageEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        float amount = event.getOriginalDamage();
+        // getNewDamage = реально снятое HP (после брони, зачарований, absorption);
+        // getOriginalDamage показывал бы исходный урон до защит — путаница для игрока.
+        float amount = event.getNewDamage();
 
         if (amount <= 0 || entity.level().isClientSide()) {
             return;
