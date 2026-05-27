@@ -4,12 +4,12 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 public class DamageIndicatorManager {
-    // Хард-кэп против флуда: без лимита 10k пакетов/с моментально съедают кучу.
+    // Hard cap against flood: without it, 10k packets/s would exhaust the heap.
     private static final int MAX_INDICATORS = 512;
 
-    // ArrayDeque + synchronized: после enqueueWork всё идёт с main thread,
-    // но render и tick тоже на main thread — sync дёшев, removeFirst() O(1)
-    // (в отличие от CopyOnWriteArrayList.remove(0) — там O(n) на каждое переполнение).
+    // ArrayDeque + synchronized: after enqueueWork everything runs on the main thread
+    // (render and tick too), so the sync is cheap, and pollFirst() is O(1)
+    // (vs CopyOnWriteArrayList.remove(0) — O(n) on every overflow).
     private static final Deque<DamageIndicator> indicators = new ArrayDeque<>();
 
     public static synchronized void addIndicator(double x, double y, double z, float damage, boolean isCritical) {
@@ -25,8 +25,8 @@ public class DamageIndicatorManager {
     }
 
     /**
-     * Возвращает снапшот списка индикаторов; рендер итерируется по снапшоту, чтобы
-     * не держать монитор в горячем цикле и не падать на concurrent modification.
+     * Returns a snapshot of the indicator list; the renderer iterates over the snapshot
+     * so it doesn't hold the monitor during the hot loop and doesn't risk concurrent modification.
      */
     public static synchronized DamageIndicator[] snapshot() {
         return indicators.toArray(new DamageIndicator[0]);

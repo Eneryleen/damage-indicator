@@ -18,14 +18,14 @@ public class Networking {
     }
 
     private static void handleSpawnIndicator(SpawnIndicatorPayload payload, IPayloadContext context) {
-        // Защита от враждебного/багованного сервера: NaN/Infinity в координатах
-        // ломает матрицы рендера, а отрицательный/нечисловой damage не имеет смысла.
+        // Guard against a hostile/buggy server: NaN/Infinity in coordinates
+        // corrupts the render matrices, and a non-positive/non-finite damage value is meaningless.
         if (!Double.isFinite(payload.x()) || !Double.isFinite(payload.y()) || !Double.isFinite(payload.z())
                 || !Float.isFinite(payload.damage()) || payload.damage() <= 0) {
             return;
         }
-        // Сетевой пакет приходит в network-треде; работа с состоянием рендера
-        // (DamageIndicatorManager / Minecraft instance) обязана идти в main-треде.
+        // Payloads arrive on the network thread; touching render state
+        // (DamageIndicatorManager / Minecraft instance) must happen on the main thread.
         context.enqueueWork(() -> DamageIndicatorManager.addIndicator(
                 payload.x(), payload.y(), payload.z(), payload.damage(), payload.isCritical()));
     }

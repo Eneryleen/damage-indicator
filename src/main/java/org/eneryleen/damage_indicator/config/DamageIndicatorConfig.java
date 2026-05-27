@@ -41,8 +41,8 @@ public class DamageIndicatorConfig {
     public float criticalPopEffect = 0.5f;
     public float normalPopEffect = 0.2f;
 
-    // volatile нужен для корректного double-checked-locking синглтона:
-    // без него JIT/CPU могут опубликовать ссылку на ещё недо-инициализированный объект.
+    // volatile is required for a correct double-checked-locking singleton:
+    // without it the JIT/CPU may publish a reference to a partially-constructed object.
     private static volatile DamageIndicatorConfig INSTANCE = null;
 
     public static DamageIndicatorConfig getInstance() {
@@ -68,8 +68,8 @@ public class DamageIndicatorConfig {
                 }
                 Damage_indicator.LOGGER.warn("Config file {} is empty, using defaults", CONFIG_FILE);
             } catch (Exception e) {
-                // Ловим и IOException, и JsonSyntaxException (он RuntimeException) —
-                // битый JSON не должен валить весь мод; падать в дефолт безопаснее.
+                // Catch both IOException and JsonSyntaxException (a RuntimeException) —
+                // a broken JSON file must not bring the mod down; defaulting is safer.
                 Damage_indicator.LOGGER.warn("Failed to load config {}, falling back to defaults: {}",
                         CONFIG_FILE, e.toString());
             }
@@ -95,7 +95,7 @@ public class DamageIndicatorConfig {
         try {
             return String.format(damageFormat, damage).replace(',', '.');
         } catch (IllegalFormatException e) {
-            // Битый damageFormat (например "%d" или "%s") иначе крашит клиент на каждый удар.
+            // A broken damageFormat (e.g. "%d" or "%s") would otherwise crash the client on every hit.
             return String.format(DEFAULT_DAMAGE_FORMAT, damage).replace(',', '.');
         }
     }

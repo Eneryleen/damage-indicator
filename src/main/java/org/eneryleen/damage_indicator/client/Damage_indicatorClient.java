@@ -15,7 +15,7 @@ import org.eneryleen.damage_indicator.config.ConfigScreenFactory;
 public class Damage_indicatorClient {
 
     public Damage_indicatorClient(IEventBus modBus, ModContainer container) {
-        // Явный class-token (как делает сам NeoForge): надёжный вывод подтипа RenderLevelStageEvent.
+        // Explicit class-token (as NeoForge itself does): reliable subtype resolution for RenderLevelStageEvent.
         NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, Damage_indicatorClient::onClientTick);
         NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.AfterOpaqueFeatures.class, DamageIndicatorRenderer::render);
 

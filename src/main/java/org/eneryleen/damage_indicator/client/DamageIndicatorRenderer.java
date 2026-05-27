@@ -13,10 +13,10 @@ import org.joml.Quaternionf;
 public class DamageIndicatorRenderer {
     private static final float DEGREES_TO_RADIANS = 0.017453292F;
 
-    // В 26.1.x подписываемся на конкретный подкласс (AfterOpaqueFeatures = аналог
-    // прежнего Stage.AFTER_ENTITIES); enum Stage и event.getCamera() удалены.
-    // Живую Camera (с pos/yaw/pitch) берём из EntityRenderDispatcher.camera —
-    // это то же поле, которое использует ванильный entity-рендер.
+    // In 26.1.x we subscribe to a concrete subclass (AfterOpaqueFeatures ~= old
+    // Stage.AFTER_ENTITIES); the Stage enum and event.getCamera() were removed.
+    // The live Camera (with pos/yaw/pitch) is taken from EntityRenderDispatcher.camera —
+    // the same field vanilla entity rendering uses.
     public static void render(RenderLevelStageEvent.AfterOpaqueFeatures event) {
         DamageIndicatorConfig config = DamageIndicatorConfig.getInstance();
         if (!config.enabled) return;
@@ -30,7 +30,7 @@ public class DamageIndicatorRenderer {
         Font font = client.font;
         long currentTime = System.currentTimeMillis();
 
-        // 26.1.x: Mojang убрал префикс get у Camera-аксессоров.
+        // 26.1.x: Mojang dropped the get-prefix on Camera accessors.
         Vec3 cameraPos = camera.position();
         double maxDistanceSquared = config.maxRenderDistance * config.maxRenderDistance;
 

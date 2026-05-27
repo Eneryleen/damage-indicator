@@ -15,8 +15,8 @@ public class DamageEventHandler {
     @SubscribeEvent
     public static void onLivingDamagePost(LivingDamageEvent.Post event) {
         LivingEntity entity = event.getEntity();
-        // getNewDamage = реально снятое HP (после брони, зачарований, absorption);
-        // getOriginalDamage показывал бы исходный урон до защит — путаница для игрока.
+        // getNewDamage = actual HP lost (after armor, enchantments, absorption);
+        // getOriginalDamage would show pre-mitigation damage — misleading for the player.
         float amount = event.getNewDamage();
 
         if (amount <= 0 || entity.level().isClientSide()) {
