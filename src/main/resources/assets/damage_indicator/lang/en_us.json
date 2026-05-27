@@ -1,0 +1,43 @@
+{
+  "config.damage_indicator.title": "Damage Indicator Settings",
+
+  "config.damage_indicator.category.display": "Display Settings",
+  "config.damage_indicator.enabled": "Enabled",
+  "config.damage_indicator.enabled.tooltip": "Enable or disable damage indicators",
+  "config.damage_indicator.maxRenderDistance": "Max Render Distance",
+  "config.damage_indicator.maxRenderDistance.tooltip": "Maximum distance (in blocks) at which damage indicators are rendered",
+  "config.damage_indicator.baseScale": "Base Scale",
+  "config.damage_indicator.baseScale.tooltip": "Base size of the damage indicators",
+
+  "config.damage_indicator.category.text": "Text Settings",
+  "config.damage_indicator.damageFormat": "Damage Format",
+  "config.damage_indicator.damageFormat.tooltip": "Format string for displaying damage (e.g., %.1f for one decimal place)",
+  "config.damage_indicator.showDecimals": "Show Decimals",
+  "config.damage_indicator.showDecimals.tooltip": "Show decimal values or round to integers",
+
+  "config.damage_indicator.category.color": "Color Settings",
+  "config.damage_indicator.normalColor": "Normal Damage Color",
+  "config.damage_indicator.normalColor.tooltip": "Color for normal damage indicators",
+  "config.damage_indicator.criticalColor": "Critical Damage Color",
+  "config.damage_indicator.criticalColor.tooltip": "Color for critical damage indicators",
+
+  "config.damage_indicator.category.animation": "Animation Settings",
+  "config.damage_indicator.lifetime": "Lifetime (ms)",
+  "config.damage_indicator.lifetime.tooltip": "How long indicators stay visible (in milliseconds)",
+  "config.damage_indicator.popDuration": "Pop Duration (ms)",
+  "config.damage_indicator.popDuration.tooltip": "Duration of the pop animation (in milliseconds)",
+  "config.damage_indicator.fadeStartTime": "Fade Start Time (ms)",
+  "config.damage_indicator.fadeStartTime.tooltip": "When the fade-out animation starts (in milliseconds)",
+  "config.damage_indicator.verticalSpeed": "Vertical Speed",
+  "config.damage_indicator.verticalSpeed.tooltip": "How fast indicators move upward",
+  "config.damage_indicator.horizontalSpread": "Horizontal Spread",
+  "config.damage_indicator.horizontalSpread.tooltip": "How much indicators spread horizontally",
+
+  "config.damage_indicator.category.critical": "Critical Hit Settings",
+  "config.damage_indicator.criticalScaleMultiplier": "Critical Scale Multiplier",
+  "config.damage_indicator.criticalScaleMultiplier.tooltip": "Size multiplier for critical damage indicators",
+  "config.damage_indicator.criticalPopEffect": "Critical Pop Effect",
+  "config.damage_indicator.criticalPopEffect.tooltip": "Intensity of the pop effect for critical hits",
+  "config.damage_indicator.normalPopEffect": "Normal Pop Effect",
+  "config.damage_indicator.normalPopEffect.tooltip": "Intensity of the pop effect for normal hits"
+}

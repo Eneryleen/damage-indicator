@@ -1,0 +1,43 @@
+{
+  "config.damage_indicator.title": "Настройки индикатора урона",
+
+  "config.damage_indicator.category.display": "Настройки отображения",
+  "config.damage_indicator.enabled": "Включено",
+  "config.damage_indicator.enabled.tooltip": "Включить или выключить индикаторы урона",
+  "config.damage_indicator.maxRenderDistance": "Макс. дистанция отрисовки",
+  "config.damage_indicator.maxRenderDistance.tooltip": "Максимальная дистанция (в блоках) для отрисовки индикаторов урона",
+  "config.damage_indicator.baseScale": "Базовый масштаб",
+  "config.damage_indicator.baseScale.tooltip": "Базовый размер индикаторов урона",
+
+  "config.damage_indicator.category.text": "Настройки текста",
+  "config.damage_indicator.damageFormat": "Формат урона",
+  "config.damage_indicator.damageFormat.tooltip": "Формат отображения урона (например, %.1f для одного знака после запятой)",
+  "config.damage_indicator.showDecimals": "Показывать дробные числа",
+  "config.damage_indicator.showDecimals.tooltip": "Показывать дробные значения или округлять до целых чисел",
+
+  "config.damage_indicator.category.color": "Настройки цветов",
+  "config.damage_indicator.normalColor": "Цвет обычного урона",
+  "config.damage_indicator.normalColor.tooltip": "Цвет индикаторов обычного урона",
+  "config.damage_indicator.criticalColor": "Цвет критического урона",
+  "config.damage_indicator.criticalColor.tooltip": "Цвет индикаторов критического урона",
+
+  "config.damage_indicator.category.animation": "Настройки анимации",
+  "config.damage_indicator.lifetime": "Время жизни (мс)",
+  "config.damage_indicator.lifetime.tooltip": "Как долго индикаторы остаются видимыми (в миллисекундах)",
+  "config.damage_indicator.popDuration": "Длительность появления (мс)",
+  "config.damage_indicator.popDuration.tooltip": "Длительность анимации появления (в миллисекундах)",
+  "config.damage_indicator.fadeStartTime": "Начало затухания (мс)",
+  "config.damage_indicator.fadeStartTime.tooltip": "Когда начинается анимация затухания (в миллисекундах)",
+  "config.damage_indicator.verticalSpeed": "Скорость по вертикали",
+  "config.damage_indicator.verticalSpeed.tooltip": "Как быстро индикаторы двигаются вверх",
+  "config.damage_indicator.horizontalSpread": "Горизонтальный разброс",
+  "config.damage_indicator.horizontalSpread.tooltip": "Насколько сильно индикаторы разбрасываются по горизонтали",
+
+  "config.damage_indicator.category.critical": "Настройки критических ударов",
+  "config.damage_indicator.criticalScaleMultiplier": "Множитель размера критов",
+  "config.damage_indicator.criticalScaleMultiplier.tooltip": "Множитель размера для критических индикаторов урона",
+  "config.damage_indicator.criticalPopEffect": "Эффект появления критов",
+  "config.damage_indicator.criticalPopEffect.tooltip": "Интенсивность эффекта появления для критических ударов",
+  "config.damage_indicator.normalPopEffect": "Эффект появления обычных ударов",
+  "config.damage_indicator.normalPopEffect.tooltip": "Интенсивность эффекта появления для обычных ударов"
+}
