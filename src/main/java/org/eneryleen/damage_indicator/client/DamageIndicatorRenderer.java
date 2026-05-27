@@ -30,7 +30,8 @@ public class DamageIndicatorRenderer {
         Font font = client.font;
         long currentTime = System.currentTimeMillis();
 
-        Vec3 cameraPos = camera.getPosition();
+        // 26.1.x: Mojang убрал префикс get у Camera-аксессоров.
+        Vec3 cameraPos = camera.position();
         double maxDistanceSquared = config.maxRenderDistance * config.maxRenderDistance;
 
         for (DamageIndicator indicator : DamageIndicatorManager.snapshot()) {
@@ -47,8 +48,8 @@ public class DamageIndicatorRenderer {
 
             poseStack.translate(indicatorPos.x - cameraPos.x, indicatorPos.y - cameraPos.y, indicatorPos.z - cameraPos.z);
 
-            poseStack.mulPose(new Quaternionf().rotationY(-camera.getYRot() * DEGREES_TO_RADIANS));
-            poseStack.mulPose(new Quaternionf().rotationX(camera.getXRot() * DEGREES_TO_RADIANS));
+            poseStack.mulPose(new Quaternionf().rotationY(-camera.yRot() * DEGREES_TO_RADIANS));
+            poseStack.mulPose(new Quaternionf().rotationX(camera.xRot() * DEGREES_TO_RADIANS));
 
             float baseScale = -config.baseScale * (indicator.isCritical ? config.criticalScaleMultiplier : 1.0f);
             poseStack.scale(baseScale * scale, baseScale * scale, baseScale);
