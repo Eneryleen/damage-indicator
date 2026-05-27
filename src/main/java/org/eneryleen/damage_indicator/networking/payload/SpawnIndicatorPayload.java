@@ -4,13 +4,14 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.eneryleen.damage_indicator.Damage_indicator;
 
 public record SpawnIndicatorPayload(double x, double y, double z, float damage, boolean isCritical) implements CustomPacketPayload {
 
+    // В 26.1.x net.minecraft.resources.ResourceLocation переименован в Identifier.
     public static final CustomPacketPayload.Type<SpawnIndicatorPayload> TYPE =
-            new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(Damage_indicator.MOD_ID, "spawn_indicator"));
+            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(Damage_indicator.MOD_ID, "spawn_indicator"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SpawnIndicatorPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.DOUBLE, SpawnIndicatorPayload::x,
