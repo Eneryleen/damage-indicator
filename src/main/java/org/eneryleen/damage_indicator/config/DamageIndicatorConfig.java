@@ -3,15 +3,18 @@ package org.eneryleen.damage_indicator.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.neoforged.fml.loading.FMLPaths;
+import org.eneryleen.damage_indicator.Damage_indicator;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.IllegalFormatException;
 
 public class DamageIndicatorConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "damage_indicator.json");
+    private static final String DEFAULT_DAMAGE_FORMAT = "%.1f";
 
     // Display settings
     public boolean enabled = true;
@@ -19,7 +22,7 @@ public class DamageIndicatorConfig {
     public float baseScale = 0.025f;
 
     // Text settings
-    public String damageFormat = "%.1f";
+    public String damageFormat = DEFAULT_DAMAGE_FORMAT;
     public boolean showDecimals = true;
 
     // Color settings
@@ -38,21 +41,37 @@ public class DamageIndicatorConfig {
     public float criticalPopEffect = 0.5f;
     public float normalPopEffect = 0.2f;
 
-    private static DamageIndicatorConfig INSTANCE = null;
+    // volatile нужен для корректного double-checked-locking синглтона:
+    // без него JIT/CPU могут опубликовать ссылку на ещё недо-инициализированный объект.
+    private static volatile DamageIndicatorConfig INSTANCE = null;
 
     public static DamageIndicatorConfig getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = load();
+        DamageIndicatorConfig local = INSTANCE;
+        if (local == null) {
+            synchronized (DamageIndicatorConfig.class) {
+                local = INSTANCE;
+                if (local == null) {
+                    local = load();
+                    INSTANCE = local;
+                }
+            }
         }
-        return INSTANCE;
+        return local;
     }
 
     public static DamageIndicatorConfig load() {
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
-                return GSON.fromJson(reader, DamageIndicatorConfig.class);
-            } catch (IOException e) {
-                e.printStackTrace();
+                DamageIndicatorConfig loaded = GSON.fromJson(reader, DamageIndicatorConfig.class);
+                if (loaded != null) {
+                    return loaded;
+                }
+                Damage_indicator.LOGGER.warn("Config file {} is empty, using defaults", CONFIG_FILE);
+            } catch (Exception e) {
+                // Ловим и IOException, и JsonSyntaxException (он RuntimeException) —
+                // битый JSON не должен валить весь мод; падать в дефолт безопаснее.
+                Damage_indicator.LOGGER.warn("Failed to load config {}, falling back to defaults: {}",
+                        CONFIG_FILE, e.toString());
             }
         }
 
@@ -65,15 +84,19 @@ public class DamageIndicatorConfig {
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(this, writer);
         } catch (IOException e) {
-            e.printStackTrace();
+            Damage_indicator.LOGGER.warn("Failed to save config {}: {}", CONFIG_FILE, e.toString());
         }
     }
 
     public String formatDamage(float damage) {
-        if (showDecimals) {
-            return String.format(damageFormat, damage).replace(',', '.');
-        } else {
+        if (!showDecimals) {
             return String.valueOf((int) Math.ceil(damage));
+        }
+        try {
+            return String.format(damageFormat, damage).replace(',', '.');
+        } catch (IllegalFormatException e) {
+            // Битый damageFormat (например "%d" или "%s") иначе крашит клиент на каждый удар.
+            return String.format(DEFAULT_DAMAGE_FORMAT, damage).replace(',', '.');
         }
     }
 
