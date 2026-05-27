@@ -26,8 +26,9 @@ neoForge {
 
     // Parchment mappings are not yet published for MC 26.1.x — block disabled.
     // TODO: re-enable when parchment-26.1.x lands on https://maven.parchmentmc.org/
+    //   mappingsVersion format: 'YYYY.MM.DD' (latest date from parchmentmc.org/docs)
     // parchment {
-    //     mappingsVersion = '...'
+    //     mappingsVersion = 'YYYY.MM.DD'
     //     minecraftVersion = '26.1.2'
     // }
 
