@@ -13,17 +13,17 @@ import org.joml.Quaternionf;
 public class DamageIndicatorRenderer {
     private static final float DEGREES_TO_RADIANS = 0.017453292F;
 
-    public static void render(RenderLevelStageEvent event) {
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_ENTITIES) return;
-
+    // В 26.1.x подписываемся на конкретный подкласс (AfterOpaqueFeatures = аналог
+    // прежнего Stage.AFTER_ENTITIES); enum Stage и event.getCamera() удалены.
+    public static void render(RenderLevelStageEvent.AfterOpaqueFeatures event) {
         DamageIndicatorConfig config = DamageIndicatorConfig.getInstance();
         if (!config.enabled) return;
 
-        Camera camera = event.getCamera();
+        Minecraft client = Minecraft.getInstance();
+        Camera camera = client.gameRenderer.getMainCamera();
         if (camera == null) return;
 
         PoseStack poseStack = event.getPoseStack();
-        Minecraft client = Minecraft.getInstance();
         MultiBufferSource.BufferSource bufferSource = client.renderBuffers().bufferSource();
         Font font = client.font;
         long currentTime = System.currentTimeMillis();
