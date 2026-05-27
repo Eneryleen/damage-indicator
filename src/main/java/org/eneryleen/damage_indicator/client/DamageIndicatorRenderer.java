@@ -15,12 +15,14 @@ public class DamageIndicatorRenderer {
 
     // В 26.1.x подписываемся на конкретный подкласс (AfterOpaqueFeatures = аналог
     // прежнего Stage.AFTER_ENTITIES); enum Stage и event.getCamera() удалены.
+    // Живую Camera (с pos/yaw/pitch) берём из EntityRenderDispatcher.camera —
+    // это то же поле, которое использует ванильный entity-рендер.
     public static void render(RenderLevelStageEvent.AfterOpaqueFeatures event) {
         DamageIndicatorConfig config = DamageIndicatorConfig.getInstance();
         if (!config.enabled) return;
 
         Minecraft client = Minecraft.getInstance();
-        Camera camera = client.gameRenderer.getMainCamera();
+        Camera camera = client.getEntityRenderDispatcher().camera;
         if (camera == null) return;
 
         PoseStack poseStack = event.getPoseStack();
