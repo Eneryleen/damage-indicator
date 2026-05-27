@@ -47,7 +47,7 @@ public class ConfigScreenFactory {
         ConfigCategory text = builder.getOrCreateCategory(Component.translatable("config.damage_indicator.category.text"));
 
         text.addEntry(entryBuilder.startStrField(Component.translatable("config.damage_indicator.damageFormat"), config.damageFormat)
-                .setDefaultValue("%.1f")
+                .setDefaultValue(DamageIndicatorConfig.DEFAULT_DAMAGE_FORMAT)
                 .setTooltip(Component.translatable("config.damage_indicator.damageFormat.tooltip"))
                 .setSaveConsumer(newValue -> config.damageFormat = newValue)
                 .build());

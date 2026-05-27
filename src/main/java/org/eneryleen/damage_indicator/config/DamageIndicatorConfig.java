@@ -14,7 +14,7 @@ import java.util.IllegalFormatException;
 public class DamageIndicatorConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "damage_indicator.json");
-    private static final String DEFAULT_DAMAGE_FORMAT = "%.1f";
+    public static final String DEFAULT_DAMAGE_FORMAT = "%.1f";
 
     // Display settings
     public boolean enabled = true;

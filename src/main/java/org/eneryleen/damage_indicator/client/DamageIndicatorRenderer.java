@@ -33,7 +33,7 @@ public class DamageIndicatorRenderer {
         Vec3 cameraPos = camera.getPosition();
         double maxDistanceSquared = config.maxRenderDistance * config.maxRenderDistance;
 
-        for (DamageIndicator indicator : DamageIndicatorManager.getIndicators()) {
+        for (DamageIndicator indicator : DamageIndicatorManager.snapshot()) {
             Vec3 indicatorPos = indicator.getPosition(currentTime);
             float alpha = indicator.getAlpha(currentTime);
             float scale = indicator.getScale(currentTime);
