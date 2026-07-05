@@ -1,36 +1,35 @@
 package org.eneryleen.damage_indicator.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.eneryleen.damage_indicator.config.DamageIndicatorConfig;
 import org.joml.Quaternionf;
 
 public class DamageIndicatorRenderer {
     private static final float DEGREES_TO_RADIANS = 0.017453292F;
 
-    // In 26.1.x we subscribe to a concrete subclass (AfterOpaqueFeatures ~= old
-    // Stage.AFTER_ENTITIES); the Stage enum and event.getCamera() were removed.
-    // The live Camera (with pos/yaw/pitch) is taken from EntityRenderDispatcher.camera —
-    // the same field vanilla entity rendering uses.
-    public static void render(RenderLevelStageEvent.AfterOpaqueFeatures event) {
+    // Hooked via WorldRenderEvents.AFTER_ENTITIES; context.matrices() and
+    // context.consumers() are guaranteed non-null in drawing-phase events.
+    // The camera is NOT available on the drawing-phase context in 1.21.11,
+    // so it is taken from the game renderer directly.
+    public static void render(WorldRenderContext context) {
         DamageIndicatorConfig config = DamageIndicatorConfig.getInstance();
         if (!config.enabled) return;
 
         Minecraft client = Minecraft.getInstance();
-        Camera camera = client.getEntityRenderDispatcher().camera;
+        Camera camera = client.gameRenderer.getMainCamera();
         if (camera == null) return;
 
-        PoseStack poseStack = event.getPoseStack();
-        MultiBufferSource.BufferSource bufferSource = client.renderBuffers().bufferSource();
+        PoseStack poseStack = context.matrices();
+        MultiBufferSource bufferSource = context.consumers();
         Font font = client.font;
         long currentTime = System.currentTimeMillis();
 
-        // 26.1.x: Mojang dropped the get-prefix on Camera accessors.
         Vec3 cameraPos = camera.position();
         double maxDistanceSquared = config.maxRenderDistance * config.maxRenderDistance;
 
@@ -60,6 +59,8 @@ public class DamageIndicatorRenderer {
 
             float textWidth = font.width(indicator.text);
 
+            // drawInBatch bakes the current matrix into the vertices, so the buffer
+            // does not need to be flushed here — the world renderer flushes it later.
             font.drawInBatch(
                     indicator.text,
                     -textWidth / 2,
@@ -75,6 +76,5 @@ public class DamageIndicatorRenderer {
 
             poseStack.popPose();
         }
-        bufferSource.endBatch();
     }
 }

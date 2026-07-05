@@ -1,25 +1,28 @@
 package org.eneryleen.damage_indicator.event;
 
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
-import org.eneryleen.damage_indicator.Damage_indicator;
 import org.eneryleen.damage_indicator.networking.payload.SpawnIndicatorPayload;
-import net.neoforged.neoforge.network.PacketDistributor;
 
-@EventBusSubscriber(modid = Damage_indicator.MOD_ID)
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 public class DamageEventHandler {
 
-    @SubscribeEvent
-    public static void onLivingDamagePost(LivingDamageEvent.Post event) {
-        LivingEntity entity = event.getEntity();
-        // getNewDamage = actual HP lost (after armor, enchantments, absorption);
-        // getOriginalDamage would show pre-mitigation damage — misleading for the player.
-        float amount = event.getNewDamage();
-
-        if (amount <= 0 || entity.level().isClientSide()) {
+    // Fabric's AFTER_DAMAGE limits vs the old NeoForge LivingDamageEvent.Post:
+    //  - damageTaken includes shield/freezing mitigation but NOT armor/enchantments
+    //    (true HP lost is not exposed without a mixin);
+    //  - the event does not fire on a killing blow, so no number on the final hit.
+    // The event fires only on the server (from hurtServer), so the old
+    // isClientSide() guard is no longer needed.
+    public static void onAfterDamage(LivingEntity entity, DamageSource source,
+                                     float baseDamageTaken, float damageTaken, boolean blocked) {
+        float amount = damageTaken;
+        if (amount <= 0) {
             return;
         }
 
@@ -28,7 +31,7 @@ public class DamageEventHandler {
         double z = entity.getZ();
 
         boolean isCritical = false;
-        if (event.getSource().getEntity() instanceof Player player) {
+        if (source.getEntity() instanceof Player player) {
             isCritical = player.fallDistance > 0.0F &&
                     !player.onGround() &&
                     !player.onClimbable() &&
@@ -38,6 +41,15 @@ public class DamageEventHandler {
         }
 
         SpawnIndicatorPayload payload = new SpawnIndicatorPayload(x, y, z, amount, isCritical);
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(entity, payload);
+
+        // PlayerLookup.tracking() does not guarantee the entity itself is included,
+        // so add it explicitly; the Set dedupes in case it was.
+        Set<ServerPlayer> targets = new LinkedHashSet<>(PlayerLookup.tracking(entity));
+        if (entity instanceof ServerPlayer self) {
+            targets.add(self);
+        }
+        for (ServerPlayer player : targets) {
+            ServerPlayNetworking.send(player, payload);
+        }
     }
 }

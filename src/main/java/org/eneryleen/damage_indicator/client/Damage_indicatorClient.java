@@ -1,31 +1,29 @@
 package org.eneryleen.damage_indicator.client;
 
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
-import org.eneryleen.damage_indicator.Damage_indicator;
-import org.eneryleen.damage_indicator.config.ConfigScreenFactory;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
+import org.eneryleen.damage_indicator.networking.payload.SpawnIndicatorPayload;
 
-@Mod(value = Damage_indicator.MOD_ID, dist = Dist.CLIENT)
-public class Damage_indicatorClient {
+public class Damage_indicatorClient implements ClientModInitializer {
 
-    public Damage_indicatorClient(IEventBus modBus, ModContainer container) {
-        // Explicit class-token (as NeoForge itself does): reliable subtype resolution for RenderLevelStageEvent.
-        NeoForge.EVENT_BUS.addListener(ClientTickEvent.Post.class, Damage_indicatorClient::onClientTick);
-        NeoForge.EVENT_BUS.addListener(RenderLevelStageEvent.AfterOpaqueFeatures.class, DamageIndicatorRenderer::render);
-
-        container.registerExtensionPoint(
-                IConfigScreenFactory.class,
-                (modContainer, parentScreen) -> ConfigScreenFactory.create(parentScreen)
-        );
+    @Override
+    public void onInitializeClient() {
+        ClientPlayNetworking.registerGlobalReceiver(SpawnIndicatorPayload.TYPE, Damage_indicatorClient::handleSpawnIndicator);
+        ClientTickEvents.END_CLIENT_TICK.register(client -> DamageIndicatorManager.tick());
+        WorldRenderEvents.AFTER_ENTITIES.register(DamageIndicatorRenderer::render);
     }
 
-    private static void onClientTick(ClientTickEvent.Post event) {
-        DamageIndicatorManager.tick();
+    private static void handleSpawnIndicator(SpawnIndicatorPayload payload, ClientPlayNetworking.Context context) {
+        // Guard against a hostile/buggy server: NaN/Infinity in coordinates
+        // corrupts the render matrices, and a non-positive/non-finite damage value is meaningless.
+        if (!Double.isFinite(payload.x()) || !Double.isFinite(payload.y()) || !Double.isFinite(payload.z())
+                || !Float.isFinite(payload.damage()) || payload.damage() <= 0) {
+            return;
+        }
+        // Fabric play payload handlers already run on the render thread — no re-scheduling needed.
+        DamageIndicatorManager.addIndicator(
+                payload.x(), payload.y(), payload.z(), payload.damage(), payload.isCritical());
     }
 }

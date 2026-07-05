@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "damage_indicator",
+  "version": "${version}",
+  "name": "Damage Indicator",
+  "description": "A highly configurable damage indicator mod for Fabric",
+  "authors": [
+    "Eneryleen"
+  ],
+  "contact": {
+    "homepage": "https://projectwinter.ru",
+    "issues": "https://github.com/Eneryleen/damage-indicator/issues"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/damage_indicator/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.eneryleen.damage_indicator.Damage_indicator"
+    ],
+    "client": [
+      "org.eneryleen.damage_indicator.client.Damage_indicatorClient"
+    ],
+    "modmenu": [
+      "org.eneryleen.damage_indicator.config.ModMenuIntegration"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "cloth-config": "*",
+    "modmenu": "*"
+  }
+}

@@ -9,7 +9,6 @@ import org.eneryleen.damage_indicator.Damage_indicator;
 
 public record SpawnIndicatorPayload(double x, double y, double z, float damage, boolean isCritical) implements CustomPacketPayload {
 
-    // In 26.1.x net.minecraft.resources.ResourceLocation was renamed to Identifier.
     public static final CustomPacketPayload.Type<SpawnIndicatorPayload> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(Damage_indicator.MOD_ID, "spawn_indicator"));
 

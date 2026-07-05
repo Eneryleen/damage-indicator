@@ -2,7 +2,7 @@ package org.eneryleen.damage_indicator.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.neoforged.fml.loading.FMLPaths;
+import net.fabricmc.loader.api.FabricLoader;
 import org.eneryleen.damage_indicator.Damage_indicator;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.IllegalFormatException;
 
 public class DamageIndicatorConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    private static final File CONFIG_FILE = new File(FMLPaths.CONFIGDIR.get().toFile(), "damage_indicator.json");
+    private static final File CONFIG_FILE = FabricLoader.getInstance().getConfigDir().resolve("damage_indicator.json").toFile();
     public static final String DEFAULT_DAMAGE_FORMAT = "%.1f";
 
     // Display settings

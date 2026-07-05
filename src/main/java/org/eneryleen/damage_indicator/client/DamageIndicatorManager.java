@@ -7,8 +7,9 @@ public class DamageIndicatorManager {
     // Hard cap against flood: without it, 10k packets/s would exhaust the heap.
     private static final int MAX_INDICATORS = 512;
 
-    // ArrayDeque + synchronized: after enqueueWork everything runs on the main thread
-    // (render and tick too), so the sync is cheap, and pollFirst() is O(1)
+    // ArrayDeque + synchronized: the payload receiver runs on the render thread and
+    // tick on the client tick — the same main thread in practice, so the sync is
+    // cheap insurance, and pollFirst() is O(1)
     // (vs CopyOnWriteArrayList.remove(0) — O(n) on every overflow).
     private static final Deque<DamageIndicator> indicators = new ArrayDeque<>();
 
