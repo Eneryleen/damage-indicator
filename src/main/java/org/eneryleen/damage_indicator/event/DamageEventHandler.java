@@ -13,15 +13,10 @@ import java.util.Set;
 
 public class DamageEventHandler {
 
-    // Fabric's AFTER_DAMAGE limits vs the old NeoForge LivingDamageEvent.Post:
-    //  - damageTaken includes shield/freezing mitigation but NOT armor/enchantments
-    //    (true HP lost is not exposed without a mixin);
-    //  - the event does not fire on a killing blow, so no number on the final hit.
-    // The event fires only on the server (from hurtServer), so the old
-    // isClientSide() guard is no longer needed.
-    public static void onAfterDamage(LivingEntity entity, DamageSource source,
-                                     float baseDamageTaken, float damageTaken, boolean blocked) {
-        float amount = damageTaken;
+    // Called from the actuallyHurt mixin (server-side only): fires for every really
+    // applied hit including the killing blow, which Fabric's AFTER_DAMAGE misses.
+    // amount is post-shield / pre-armor — same scale AFTER_DAMAGE used to report.
+    public static void onDamage(LivingEntity entity, DamageSource source, float amount) {
         if (amount <= 0) {
             return;
         }
