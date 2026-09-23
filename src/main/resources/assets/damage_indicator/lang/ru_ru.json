@@ -39,5 +39,11 @@
   "config.damage_indicator.criticalPopEffect": "Эффект появления критов",
   "config.damage_indicator.criticalPopEffect.tooltip": "Интенсивность эффекта появления для критических ударов",
   "config.damage_indicator.normalPopEffect": "Эффект появления обычных ударов",
-  "config.damage_indicator.normalPopEffect.tooltip": "Интенсивность эффекта появления для обычных ударов"
+  "config.damage_indicator.normalPopEffect.tooltip": "Интенсивность эффекта появления для обычных ударов",
+
+  "damage_indicator.critical": "Крит!",
+  "config.damage_indicator.showCriticalLabel": "Надпись «Крит!»",
+  "config.damage_indicator.showCriticalLabel.tooltip": "Показывать надпись «Крит!» над числом критического урона",
+  "config.damage_indicator.criticalLabelColor": "Цвет надписи «Крит!»",
+  "config.damage_indicator.criticalLabelColor.tooltip": "Цвет надписи «Крит!» над критическим ударом"
 }

@@ -12,7 +12,8 @@ A small mod for **Fabric** that shows floating damage numbers above entities whe
 
 - Floating numbers pop up above any entity that takes damage
 - Animated: scale-pop on appear, drift upward, fade out
-- Distinct color/scale for critical hits
+- Distinct color/scale for critical hits and a localized "Crit!" label above them
+- With wrlevel (Windlands) the crit comes from the server's crit roll (`WrLevelApi.isCritHit`), not from a jump
 - Configurable via an in-game screen (Cloth Config + ModMenu) — colors, lifetime, render distance, format string, etc.
 
 ## Requirements
@@ -44,7 +45,9 @@ Open **Mods → Damage Indicator → Config** (ModMenu) in the main menu, or edi
 - **Text**: damage format string (`printf`-style), show/hide decimals
 - **Color**: normal damage color, critical damage color
 - **Animation**: lifetime, pop duration, fade timing, vertical drift speed, horizontal spread
-- **Critical**: scale multiplier and pop intensity for crits
+- **Critical**: scale multiplier and pop intensity for crits, "Crit!" label on/off and its color
+
+The "Crit!" label uses its own font id `damage_indicator:crit` (`assets/damage_indicator/font/crit.json`, a copy of the vanilla default with the unifont fallback, so CJK and other scripts render). A different typeface can be added there without code changes.
 
 If the config file is missing or broken, the mod falls back to defaults and keeps running.
 

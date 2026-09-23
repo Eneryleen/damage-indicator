@@ -40,6 +40,9 @@ public class DamageIndicatorConfig {
     public float criticalScaleMultiplier = 1.25f;
     public float criticalPopEffect = 0.5f;
     public float normalPopEffect = 0.2f;
+    // "Crit!" label above a critical number; text from lang (damage_indicator.critical)
+    public boolean showCriticalLabel = true;
+    public int criticalLabelColor = 0xFFA928;
 
     // volatile is required for a correct double-checked-locking singleton:
     // without it the JIT/CPU may publish a reference to a partially-constructed object.

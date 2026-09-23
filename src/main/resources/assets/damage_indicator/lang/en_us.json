@@ -39,5 +39,11 @@
   "config.damage_indicator.criticalPopEffect": "Critical Pop Effect",
   "config.damage_indicator.criticalPopEffect.tooltip": "Intensity of the pop effect for critical hits",
   "config.damage_indicator.normalPopEffect": "Normal Pop Effect",
-  "config.damage_indicator.normalPopEffect.tooltip": "Intensity of the pop effect for normal hits"
+  "config.damage_indicator.normalPopEffect.tooltip": "Intensity of the pop effect for normal hits",
+
+  "damage_indicator.critical": "Crit!",
+  "config.damage_indicator.showCriticalLabel": "\"Crit!\" Label",
+  "config.damage_indicator.showCriticalLabel.tooltip": "Show a \"Crit!\" label above critical damage numbers",
+  "config.damage_indicator.criticalLabelColor": "\"Crit!\" Label Color",
+  "config.damage_indicator.criticalLabelColor.tooltip": "Color of the \"Crit!\" label above critical hits"
 }

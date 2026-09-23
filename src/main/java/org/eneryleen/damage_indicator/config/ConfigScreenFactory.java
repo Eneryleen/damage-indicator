@@ -143,6 +143,18 @@ public class ConfigScreenFactory {
                 .setSaveConsumer(newValue -> config.normalPopEffect = newValue)
                 .build());
 
+        critical.addEntry(entryBuilder.startBooleanToggle(Component.translatable("config.damage_indicator.showCriticalLabel"), config.showCriticalLabel)
+                .setDefaultValue(true)
+                .setTooltip(Component.translatable("config.damage_indicator.showCriticalLabel.tooltip"))
+                .setSaveConsumer(newValue -> config.showCriticalLabel = newValue)
+                .build());
+
+        critical.addEntry(entryBuilder.startColorField(Component.translatable("config.damage_indicator.criticalLabelColor"), config.criticalLabelColor)
+                .setDefaultValue(0xFFA928)
+                .setTooltip(Component.translatable("config.damage_indicator.criticalLabelColor.tooltip"))
+                .setSaveConsumer(newValue -> config.criticalLabelColor = newValue)
+                .build());
+
         return builder.build();
     }
 }

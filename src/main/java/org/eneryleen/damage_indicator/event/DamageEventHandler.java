@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import org.eneryleen.damage_indicator.compat.WrLevelCrit;
 import org.eneryleen.damage_indicator.networking.payload.SpawnIndicatorPayload;
 
 import java.util.LinkedHashSet;
@@ -26,7 +27,10 @@ public class DamageEventHandler {
         double z = entity.getZ();
 
         boolean isCritical = false;
-        if (source.getEntity() instanceof Player player) {
+        if (WrLevelCrit.available()) {
+            // Windlands: crit is a perk with its own chance, a jump is not a crit
+            isCritical = WrLevelCrit.isCritHit(entity, source);
+        } else if (source.getEntity() instanceof Player player) {
             isCritical = player.fallDistance > 0.0F &&
                     !player.onGround() &&
                     !player.onClimbable() &&
